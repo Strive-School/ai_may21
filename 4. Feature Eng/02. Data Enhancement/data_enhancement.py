@@ -57,7 +57,7 @@ data.drop('timestamp', axis=1, inplace=True)
 
 def data_enhancement(data):
     
-    gen_data = data.copy()
+    gen_data = data
     
     for season in data['season'].unique():
         seasonal_data =  gen_data[gen_data['season'] == season]
@@ -66,30 +66,32 @@ def data_enhancement(data):
         t1_std = seasonal_data['t1'].std()
         t2_std = seasonal_data['t2'].std()
         
-        for i, d in enumerate(data[data['season'] == season]):
+        for i in gen_data[gen_data['season'] == season].index:
             if np.random.randint(2) == 1:
-                seasonal_data['hum'].values[i] += hum_std
+                gen_data['hum'].values[i] += hum_std/10
             else:
-                seasonal_data['hum'].values[i] -= hum_std
+                gen_data['hum'].values[i] -= hum_std/10
                 
             if np.random.randint(2) == 1:
-                seasonal_data['wind_speed'].values[i] += wind_speed_std
+                gen_data['wind_speed'].values[i] += wind_speed_std/10
             else:
-                seasonal_data['wind_speed'].values[i] -= wind_speed_std
+                gen_data['wind_speed'].values[i] -= wind_speed_std/10
                 
             if np.random.randint(2) == 1:
-                seasonal_data['t1'].values[i] += t1_std
+                gen_data['t1'].values[i] += t1_std/10
             else:
-                seasonal_data['t1'].values[i] -= t1_std
+                gen_data['t1'].values[i] -= t1_std/10
                 
             if np.random.randint(2) == 1:
-                seasonal_data['t2'].values[i] += t2_std
+                gen_data['t2'].values[i] += t2_std/10
             else:
-                seasonal_data['t2'].values[i] -= t2_std
-        
+                gen_data['t2'].values[i] -= t2_std/10
+
     return gen_data
 
+print(data.head(3))
 gen = data_enhancement(data)
+print(gen.head(3) )
 
 #print(gen.shape)
 
